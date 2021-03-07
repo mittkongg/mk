@@ -1,0 +1,58 @@
+function log(...)
+  print(...)
+end
+function logError(...)
+  print(...)
+end
+
+require 'class.lua.txt'
+BehaveTree = class()
+
+function BehaveTree:ctor()
+	self.father = null
+  self.children = {}
+  self.ready = true
+  self.actioning = false
+  self.travelOver = false
+	print("---BehaveTree:ctor----")
+end
+
+function BehaveTree:familyReady(node) 
+  for childIdx = 1, #node.children, 1 do
+      child = node.children[childIdx]
+      child.father.ready = true
+      if (#child.children ~= 0) then
+          self:familyReady(child);
+      end
+  end
+end
+
+function BehaveTree:travel(node, root) 
+
+  for childIdx = 1, #node.children, 1 do
+      child = node.children[childIdx];
+      if (child.father.ready and not child.actioning) then
+          childReady = child.excute(child.actioning)
+          if (childReady and #child.children ~= 0) then
+              self:travel(child, root);
+          end
+        end
+    end
+  -- 栈最后弹出 root 接单
+  if (node == root) then
+      self.travelOver = true;
+  end
+end
+
+SequnceNode = class(BehaveTree)
+
+function SequnceNode:ctor(node)
+    SequnceNode.super.ctor(self);
+    self.father = node;
+    table.insert(self.father.children, self)
+end
+
+
+function SequnceNode:excute()
+    return true;
+end

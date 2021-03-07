@@ -1,0 +1,41 @@
+require 'lead.lua.txt'
+local ue = CS.UnityEngine
+local uees = CS.UnityEngine.EventSystems
+local uee = CS.UnityEngine.Events
+
+ui_tbl = {}
+dt = 0.01
+
+function start()
+    print("lua start...")
+    local portrait_frame_prefab = ue.Resources.Load("Prefabs/portrait_frame")
+    local lifer_prefab = ue.Resources.Load("Prefabs/lifer")
+    if portrait_frame_prefab == nil or lifer_prefab == nil then
+        print("Prefabs nil")
+    else
+        local canvas_node = ue.GameObject.Find('Canvas')
+        local portrait_frame = ue.Object.Instantiate(portrait_frame_prefab)
+        local lifer = ue.Object.Instantiate(lifer_prefab)
+        lifer.name = 'xg_lifer'
+        portrait_frame.transform.parent = canvas_node.transform
+        portrait_frame.transform.position = ue.Vector3(ue.Screen.width / 2, 80, 0)
+        local progressbar_node = ue.GameObject.Find('progressbar')
+        ui_tbl.progressbar = progressbar_node:GetComponent(typeof(ue.UI.Image))
+
+        lifer.transform.parent = canvas_node.transform
+        lifer.transform.position = ue.Vector3(0, ue.Screen.height - 100, 0)
+        local lifer_text = ue.GameObject.Find('xg_lifer')
+        local name_txt = lifer_text:GetComponent(typeof(ue.UI.Text))
+        name_txt.text = "xiao zai zi"
+    end
+end
+
+function update()
+    -- print("update")
+    ui_tbl.progressbar.fillAmount = dt
+    dt = dt + 0.01
+end
+
+function ondestroy()
+    print("lua destroy")
+end

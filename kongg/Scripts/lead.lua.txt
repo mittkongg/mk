@@ -1,0 +1,68 @@
+local ue = CS.UnityEngine
+local uee = CS.UnityEngine.Events
+local uees = CS.UnityEngine.EventSystems
+local leadNode = ue.GameObject.Find('lead')
+local leadTrigger = leadNode:AddComponent(typeof(uees.EventTrigger))
+
+
+function trigger(data)
+  print(data.position.x)
+  print("-------------")
+  print(data.position.y)
+  local pos = leadNode.transform.position
+  pos.x = data.position.x
+  pos.y = data.position.y
+  leadNode.transform.position = pos
+end
+
+function moveTrigger(data)
+  print(data.position.x)
+  print("-------------")
+  print(data.position.y)
+  local pos = leadNode.transform.position
+  pos.x = data.position.x
+  pos.y = data.position.y
+  leadNode.transform.position = pos
+end
+
+local oriPos
+function pointerDownTrigger(data)
+
+  local pos = leadNode.transform.position
+  pos.x = data.position.x
+  pos.y = data.position.y
+  oriPos = pos
+  -- leadNode.transform.position = pos
+end
+
+function pointerUpTrigger(data)
+  -- print(data.position.x)
+  -- print("-------------")
+  -- print(data.position.y)
+  local pos = leadNode.transform.position
+  pos.x = data.position.x
+  pos.y = data.position.y
+  oriPos = pos
+  -- leadNode.transform.position = pos
+  leadNode.transform:Translate(10, 0, 0)
+end
+
+local leadEntry = uees.EventTrigger.Entry()
+leadEntry.eventID = uees.EventTriggerType.Drag
+leadEntry.callback:AddListener(trigger)
+-- leadTrigger.triggers:Add(leadEntry);
+
+local leadMoveEntry = uees.EventTrigger.Entry()
+leadMoveEntry.eventID = uees.EventTriggerType.Move
+leadMoveEntry.callback:AddListener(moveTrigger)
+leadTrigger.triggers:Add(leadMoveEntry)
+
+local leaPointerDownEntry = uees.EventTrigger.Entry()
+leaPointerDownEntry.eventID = uees.EventTriggerType.PointerDown
+leaPointerDownEntry.callback:AddListener(pointerDownTrigger)
+leadTrigger.triggers:Add(leaPointerDownEntry)
+
+local leaPointerUpEntry = uees.EventTrigger.Entry()
+leaPointerUpEntry.eventID = uees.EventTriggerType.PointerUp
+leaPointerUpEntry.callback:AddListener(pointerUpTrigger)
+leadTrigger.triggers:Add(leaPointerUpEntry)
